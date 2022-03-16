@@ -6,25 +6,25 @@ def output_formatter(results):
     for result in results:
         res_dict={}
         res_dict["id"] = result[0]
-        res_dict["first_name"] = result[1]
-        res_dict["last_name"] = result[2]
-        res_dict["hobbies"] = result[3]
+        res_dict["make"] = result[1]
+        res_dict["model"] = result[2]
+        res_dict["color"] = result[3]
         res_dict["active"] = result[4]
         out.append(res_dict)
     return out
 
-def insert(user_dict):
+def insert(vehicle_dict):
     value_tuple = (
-        user_dict["first_name"],
-        user_dict["last_name"],
-        user_dict["hobbies"],
+        vehicle_dict["make"],
+        vehicle_dict["model"],
+        vehicle_dict["color"],
     )
 
     stmt = """
-        INSERT INTO user (
-            first_name,
-            last_name,
-            hobbies
+        INSERT INTO vehicle (
+            make,
+            model,
+            color
             ) VALUES (?, ?, ?)
         """
     cursor = get_db()
@@ -34,29 +34,29 @@ def insert(user_dict):
 
 def scan():
     cursor = get_db().execute(
-        "SELECT * FROM user WHERE active=1", ())
+        "SELECT * FROM vehicle WHERE active=1", ())
     results = cursor.fetchall()
     cursor.close()
     return output_formatter(results)
 
 def select_by_id(pk):
-    cursor = get_db().execute("SELECT * FROM user WHERE id=?", (pk, ))
+    cursor = get_db().execute("SELECT * FROM vehicle WHERE id=?", (pk, ))
     results = cursor.fetchall()
     cursor.close()
     return output_formatter(results)
 
-def update(pk, user_data):
+def update(pk, vehicle_data):
     value_tuple = (
-        user_data["first_name"],
-        user_data["last_name"],
-        user_data["hobbies"],
+        vehicle_data["make"],
+        vehicle_data["model"],
+        vehicle_data["color"],
         pk
     )
     stmt = """
-        UPDATE user
-        SET first_name=?,
-        last_name=?,
-        hobbies=?
+        UPDATE vehicle
+        SET make=?,
+        model=?,
+        color=?
         WHERE id=?
     """
     cursor = get_db()
@@ -64,15 +64,15 @@ def update(pk, user_data):
     cursor.commit()
 
 
-def deactivate_user(pk):
+def deactivate(pk):
     # select_by_id(pk)
-    # curser = get_db().execute("SELECT id=? FROM user WHERE active=1", (pk, ))
+    # curser = get_db().execute("SELECT id=? FROM vehicle WHERE active=1", (pk, ))
     # is_active = (
-    #     user_data["active"],
+    #     vehicle_data["active"],
     #     pk
     # )
     stmt = """
-        UPDATE user
+        UPDATE vehicle
         SET active=0
         WHERE id=?
     """

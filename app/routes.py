@@ -1,6 +1,7 @@
 from flask import (Flask, request)
 from datetime import datetime
 from app.database import user
+from app.database import vehicle
 
 app = Flask(__name__)
 VERSION= "1.0.0"
@@ -49,7 +50,7 @@ def create_user():
     user.insert(user_data)
     return "", 204
 
-@app.put("/users/<id:pk>")
+@app.put("/users/<int:pk>")
 def update_user(pk):
     user_data = request.json
     user.update(pk, user_data)
@@ -57,5 +58,46 @@ def update_user(pk):
 
 @app.delete("/users/<int:pk>")
 def deactivate_user(pk):
-    user.deactivate(pk)
+    user.deactivate_user(pk)
+    return "", 204
+
+
+    # ##################################
+    ###################################
+    ###################################
+@app.get("/vehicles/<int:pk>")
+def get_vehicle_by_id(pk):
+    target_vehicle = vehicle.select_by_id(pk)
+    resp={
+        "status":"ok",
+        "message":"success",
+        "vehicle": target_vehicle,
+    }
+    return resp
+
+@app.get("/vehicles/")
+def get_all_vehicles():
+    vehicle_list = vehicle.scan()
+    resp = {
+        "status":"ok",
+        "message":"success",
+        "vehicles":vehicle_list
+    }
+    return resp
+
+@app.post("/vehicles/")
+def create_vehicle():
+    vehicle_data = request.json
+    vehicle.insert(vehicle_data)
+    return "", 204
+
+@app.put("/vehicles/<int:pk>")
+def update_vehicle(pk):
+    vehicle_data = request.json
+    vehicle.update(pk, vehicle_data)
+    return "", 204
+
+@app.delete("/vehicles/<int:pk>")
+def deactivate_vehicle(pk):
+    vehicle.deactivate_vehicle(pk)
     return "", 204

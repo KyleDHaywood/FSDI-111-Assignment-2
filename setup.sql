@@ -2,7 +2,7 @@ CREATE TABLE user (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     first_name VARCHAR(45) NOT NULL,
     last_name VARCHAR(45) NOT NULL,
-    hobbie TEXT,
+    hobbies TEXT,
     active BOOLEAN NOT NULL DEFAULT 1
 );
 
